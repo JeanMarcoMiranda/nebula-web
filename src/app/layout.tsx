@@ -7,8 +7,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 const inter = Inter({ subsets: ["latin"] }); // Configure Inter
 
 export const metadata: Metadata = {
-  title: "Color Gen",
-  description: "Minimalist Color Palette Generator",
+  title: "Nebula",
+  description: "Interface color palette generator",
 };
 
 export default function RootLayout({

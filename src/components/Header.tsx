@@ -17,7 +17,7 @@ export function Header() {
           href="/"
           className="text-xl font-bold tracking-tighter text-foreground hover:opacity-80 transition-opacity"
         >
-          Color Gen.
+          Nebula.
         </Link>
 
         {/* Simplified Navigation & Actions */}
