@@ -1,49 +1,23 @@
-"use client";
+import { Header } from "@/components/Header";
+import { Hero } from "@/components/Hero";
+import { ColorPalette } from "@/components/ColorPalette";
 
-import { useEffect } from "react";
-import { usePaletteStore } from "@/store/usePaletteStore";
-import { getContrastColor, getLuminance } from "@/lib/colors";
-
-export default function PalettePage() {
-  const { colors, generatePalette, toggleLock } = usePaletteStore();
-
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.code === "Space") {
-        e.preventDefault();
-        generatePalette();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [generatePalette]);
-
+export default function Home() {
   return (
-    <main className="flex h-screen w-full overflow-hidden">
-      {colors.map((color, index) => {
-        const textColor = getContrastColor(color.hex);
-        const luminance = getLuminance(color.hex);
+    <main className="min-h-screen w-full bg-background relative selection:bg-primary/20">
+      <Header />
 
-        return (
-          <div
-            key={color.id}
-            style={{ backgroundColor: color.hex, color: textColor }}
-            className="flex flex-1 flex-col items-center justify-center transition-colors duration-200"
-          >
-            <span className="text-2xl font-bold uppercase">{color.hex}</span>
-            <span className="text-sm mt-2">
-              Luminancia: {(luminance * 100).toFixed(1)}%
-            </span>
-            <button
-              onClick={() => toggleLock(color.id)}
-              className="mt-4 p-2 rounded bg-white/20 hover:bg-white/30 backdrop-blur-md transition-colors"
-            >
-              {color.isLocked ? "🔒 Bloqueado" : "🔓 Desbloquear"}
-            </button>
-          </div>
-        );
-      })}
+      <div className="flex flex-col gap-12 pb-32">
+        <Hero />
+
+        <div className="px-4 md:px-8">
+          <ColorPalette />
+        </div>
+      </div>
+
+      <footer className="w-full py-8 text-center text-sm text-muted-foreground border-t border-border mt-auto">
+        <p>Designed with minimalism in mind.</p>
+      </footer>
     </main>
   );
 }
