@@ -38,7 +38,7 @@ export function ColorPalette() {
   if (!mounted) return null;
 
   return (
-    <div className="w-full max-w-screen-2xl mx-auto flex flex-col gap-[var(--spacing-section)] px-4 md:px-8 pb-32">
+    <div className="w-full max-w-screen-2xl mx-auto flex flex-col gap-[var(--spacing-section)]">
       <PaletteControls />
 
       <div className="flex flex-col gap-[var(--spacing-section)]">
@@ -78,7 +78,7 @@ function PaletteStrip({ mode }: { mode: "light" | "dark" }) {
           return (
             <div
               key={`${color.id}-${mode}`}
-              className="relative flex-1 h-[120px] md:h-[300px] flex flex-col items-center justify-center transition-all duration-500 ease-out hover:flex-[1.5] group"
+              className="relative flex-1 h-[160px] md:h-[320px] flex flex-col items-center justify-center transition-all duration-500 ease-out hover:flex-[1.5] group"
               style={{ backgroundColor: hex, color: textColor }}
             >
               <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
@@ -86,7 +86,7 @@ function PaletteStrip({ mode }: { mode: "light" | "dark" }) {
                   variant="ghost"
                   size="icon"
                   onClick={() => toggleLock(color.id)}
-                  className="h-8 w-8 rounded-full bg-black/10 hover:bg-black/20 text-inherit hover:text-inherit backdrop-blur-md"
+                  className="h-9 w-9 rounded-full bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 text-inherit hover:text-inherit backdrop-blur-xl transition-all duration-200"
                 >
                   {color.isLocked ? (
                     <Lock className="w-3 h-3" />
@@ -98,7 +98,7 @@ function PaletteStrip({ mode }: { mode: "light" | "dark" }) {
                   variant="ghost"
                   size="icon"
                   onClick={() => copyToClipboard(hex)}
-                  className="h-8 w-8 rounded-full bg-black/10 hover:bg-black/20 text-inherit hover:text-inherit backdrop-blur-md"
+                  className="h-9 w-9 rounded-full bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 text-inherit hover:text-inherit backdrop-blur-xl transition-all duration-200"
                 >
                   <Copy className="w-3 h-3" />
                 </Button>

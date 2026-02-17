@@ -33,13 +33,13 @@ export function PaletteControls() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 items-end md:items-center justify-between w-full max-w-screen-xl mx-auto px-2">
-      <div className="flex flex-col gap-4 w-full md:w-1/3">
-        <div className="flex justify-between items-center bg-transparent">
-          <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+    <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start md:items-center justify-between w-full max-w-screen-xl mx-auto px-2">
+      <div className="flex flex-col gap-3 w-full md:w-80">
+        <div className="flex justify-between items-baseline bg-transparent">
+          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
             Palette Size
           </span>
-          <span className="text-sm font-mono text-foreground">
+          <span className="text-lg font-semibold tabular-nums text-foreground">
             {paletteSize}
           </span>
         </div>

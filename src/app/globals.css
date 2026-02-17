@@ -7,9 +7,11 @@
   --radius-xl: calc(var(--radius) + 4px);
   
   /* Minimalist Spacing System - Macro Space Rule */
-  --spacing-macro: 160px; 
-  --spacing-section: 120px;
-  --spacing-micro: 4px;
+  --spacing-macro: 160px;      /* Entre secciones principales */
+  --spacing-section: 96px;     /* Entre subsecciones */
+  --spacing-component: 64px;   /* Entre componentes relacionados */
+  --spacing-element: 32px;     /* Entre elementos */
+  --spacing-micro: 4px;        /* Micro espaciado */
   
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -138,10 +140,11 @@
     /* 
        RULE 2: Typography - Body
        Size: 16px - 18px 
-       Leading: 1.6 - 1.8 for maximum readability
+       Leading: 1.75 for optimal readability
     */
     font-size: 16px;
-    line-height: 1.8; 
+    line-height: 1.75;
+    letter-spacing: -0.01em;
   }
   h1, h2, h3, h4, h5, h6 {
     /* 

@@ -27,27 +27,30 @@ export function ThemePreview() {
   const [previewTheme, setPreviewTheme] = useState<"light" | "dark">("light");
 
   return (
-    <div className="w-full flex flex-col gap-[var(--spacing-macro)] py-12">
-      <div className="flex justify-end mb-4">
-        <div className="flex items-center gap-2 bg-secondary/50 p-1 rounded-full border border-border">
-          <Button
-            variant={previewTheme === "light" ? "secondary" : "ghost"}
-            size="sm"
+    <div className="w-full flex flex-col gap-[var(--spacing-section)]">
+      <div className="flex justify-end">
+        <div className="flex items-center gap-1 text-sm">
+          <button
             onClick={() => setPreviewTheme("light")}
-            className="rounded-full h-8 px-4 text-xs font-medium"
+            className={`px-5 py-2 font-medium transition-all duration-300 ${
+              previewTheme === "light"
+                ? "text-foreground"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
           >
-            <Sun className="w-3 h-3 mr-2" />
             Light
-          </Button>
-          <Button
-            variant={previewTheme === "dark" ? "secondary" : "ghost"}
-            size="sm"
+          </button>
+          <span className="text-muted-foreground/30">/</span>
+          <button
             onClick={() => setPreviewTheme("dark")}
-            className="rounded-full h-8 px-4 text-xs font-medium"
+            className={`px-5 py-2 font-medium transition-all duration-300 ${
+              previewTheme === "dark"
+                ? "text-foreground"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
           >
-            <Moon className="w-3 h-3 mr-2" />
             Dark
-          </Button>
+          </button>
         </div>
       </div>
 
@@ -60,7 +63,7 @@ export function ThemePreview() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-baseline">
               {/* H1 - Extreme Hierarchy */}
               <div className="space-y-6">
-                <h1 className="text-7xl md:text-8xl font-bold tracking-tighter leading-[0.9]">
+                <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.85]">
                   Visual
                   <br />
                   Clarity.
@@ -133,7 +136,7 @@ export function ThemePreview() {
           <section className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
             <SectionHeader number="03" title="Interface" />
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16">
               {/* Column 1: Actions & Inputs */}
               <div className="space-y-12">
                 {/* Buttons */}

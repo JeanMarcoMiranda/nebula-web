@@ -7,7 +7,7 @@ export function Hero() {
   const { generatePalette } = usePaletteStore();
 
   return (
-    <section className="pt-[var(--spacing-macro)] pb-[var(--spacing-section)] px-8 max-w-screen-xl mx-auto flex flex-col gap-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+    <section className="pt-32 md:pt-40 pb-24 md:pb-32 px-8 max-w-screen-xl mx-auto flex flex-col gap-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <h1 className="max-w-5xl text-6xl md:text-8xl font-extrabold tracking-tighter text-foreground leading-none">
         Curated colors for <br className="hidden md:block" /> digital artisans.
       </h1>
@@ -20,7 +20,7 @@ export function Hero() {
         <Button
           size="lg"
           onClick={generatePalette}
-          className="h-12 px-8 text-base font-medium rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+          className="h-14 px-10 text-base font-semibold rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-[1.02]"
         >
           Generate Palette
         </Button>

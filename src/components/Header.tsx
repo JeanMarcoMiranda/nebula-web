@@ -11,7 +11,7 @@ export function Header() {
   const { view, setView } = usePaletteStore();
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
-      <div className="container mx-auto px-6 h-20 flex items-center justify-between">
+      <div className="container mx-auto px-6 md:px-8 h-16 md:h-18 flex items-center justify-between">
         {/* Minimalist Logo - Typography based */}
         <Link
           href="/"
@@ -24,10 +24,10 @@ export function Header() {
         <div className="flex items-center gap-12">
           {/* Desktop Nav - Rule 5: Reduce menu to strictly necessary */}
           {/* View Toggle - Generator / Preview */}
-          <div className="hidden md:flex items-center gap-1 bg-secondary/50 p-1 rounded-full border border-border/50 backdrop-blur-sm">
+          <div className="hidden md:flex items-center gap-0.5 bg-secondary/30 p-0.5 rounded-full border border-border/30 backdrop-blur-sm">
             <button
               onClick={() => setView("generator")}
-              className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ${
+              className={`px-5 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
                 view === "generator"
                   ? "bg-background shadow-sm text-foreground"
                   : "text-muted-foreground hover:text-foreground"
@@ -37,7 +37,7 @@ export function Header() {
             </button>
             <button
               onClick={() => setView("preview")}
-              className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ${
+              className={`px-5 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
                 view === "preview"
                   ? "bg-background shadow-sm text-foreground"
                   : "text-muted-foreground hover:text-foreground"
