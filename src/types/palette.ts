@@ -13,4 +13,6 @@ export interface PaletteState {
   setColors: (colors: ColorNode[]) => void;
   paletteSize: number;
   setPaletteSize: (size: number) => void;
+  view: "generator" | "preview";
+  setView: (view: "generator" | "preview") => void;
 }

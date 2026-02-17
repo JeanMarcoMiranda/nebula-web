@@ -136,19 +136,26 @@
   body {
     @apply bg-background text-foreground antialiased;
     /* 
-       RULE 2: Tipografía
-       Cuerpo: 16px - 18px con interlineado generoso (1.6 - 1.8) 
+       RULE 2: Typography - Body
+       Size: 16px - 18px 
+       Leading: 1.6 - 1.8 for maximum readability
     */
     font-size: 16px;
-    line-height: 1.7; 
+    line-height: 1.8; 
   }
   h1, h2, h3, h4, h5, h6 {
     /* 
-       RULE 2: Jerarquía Extrema 
-       Títulos grandes y pesados o ligeros
+       RULE 2: Extreme Hierarchy 
+       Headings: Large sizes, tight leading, varying weights (Bold/Black)
     */
     line-height: 1.1; 
     letter-spacing: -0.02em;
-    font-weight: 700; /* Bold/Black */
+    font-weight: 700; 
+    color: var(--foreground);
+  }
+  
+  h1 {
+    /* Rule 2: H1 64px - 96px */
+    @apply text-6xl md:text-7xl lg:text-8xl;
   }
 }

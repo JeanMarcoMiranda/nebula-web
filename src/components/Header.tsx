@@ -5,36 +5,52 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
+import { usePaletteStore } from "@/store/usePaletteStore";
 
 export function Header() {
+  const { view, setView } = usePaletteStore();
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
       <div className="container mx-auto px-6 h-20 flex items-center justify-between">
         {/* Minimalist Logo - Typography based */}
         <Link
           href="/"
-          className="text-xl font-bold tracking-tight text-foreground hover:opacity-80 transition-opacity"
+          className="text-xl font-bold tracking-tighter text-foreground hover:opacity-80 transition-opacity"
         >
           Color Gen.
         </Link>
 
         {/* Simplified Navigation & Actions */}
-        <div className="flex items-center gap-8">
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
-            <Link href="/" className="hover:text-foreground transition-colors">
-              Generate
-            </Link>
-            <Link
-              href="/explore"
-              className="hover:text-foreground transition-colors"
+        <div className="flex items-center gap-12">
+          {/* Desktop Nav - Rule 5: Reduce menu to strictly necessary */}
+          {/* View Toggle - Generator / Preview */}
+          <div className="hidden md:flex items-center gap-1 bg-secondary/50 p-1 rounded-full border border-border/50 backdrop-blur-sm">
+            <button
+              onClick={() => setView("generator")}
+              className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ${
+                view === "generator"
+                  ? "bg-background shadow-sm text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
-              Explore
-            </Link>
-          </nav>
+              Generator
+            </button>
+            <button
+              onClick={() => setView("preview")}
+              className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ${
+                view === "preview"
+                  ? "bg-background shadow-sm text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Preview
+            </button>
+          </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <ThemeToggle />
 
+            {/* Mobile Menu - kept minimalist */}
             <div className="md:hidden">
               <Sheet>
                 <SheetTrigger asChild>
@@ -48,18 +64,18 @@ export function Header() {
                 </SheetTrigger>
                 <SheetContent side="right" className="w-[300px] border-l-0">
                   <div className="flex flex-col gap-6 mt-12 px-4">
-                    <Link
-                      href="/"
-                      className="text-2xl font-light hover:text-primary transition-colors"
+                    <button
+                      onClick={() => setView("generator")}
+                      className={`text-2xl font-light text-left transition-colors ${view === "generator" ? "text-primary" : "hover:text-primary"}`}
                     >
-                      Generate
-                    </Link>
-                    <Link
-                      href="/explore"
-                      className="text-2xl font-light hover:text-primary transition-colors"
+                      Generator
+                    </button>
+                    <button
+                      onClick={() => setView("preview")}
+                      className={`text-2xl font-light text-left transition-colors ${view === "preview" ? "text-primary" : "hover:text-primary"}`}
                     >
-                      Explore
-                    </Link>
+                      Preview
+                    </button>
                   </div>
                 </SheetContent>
               </Sheet>

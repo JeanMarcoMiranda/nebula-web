@@ -70,4 +70,7 @@ export const usePaletteStore = create<PaletteState>((set) => ({
         return { paletteSize: size, colors: state.colors.slice(0, size) };
       }
     }),
+
+  view: "generator",
+  setView: (view) => set({ view }),
 }));

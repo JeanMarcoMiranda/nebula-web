@@ -1,8 +1,6 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Command } from "lucide-react";
 import { usePaletteStore } from "@/store/usePaletteStore";
 
 export function Hero() {
@@ -10,7 +8,7 @@ export function Hero() {
 
   return (
     <section className="pt-[var(--spacing-macro)] pb-[var(--spacing-section)] px-8 max-w-screen-xl mx-auto flex flex-col gap-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <h1 className="max-w-5xl text-6xl md:text-8xl font-bold tracking-tighter text-foreground leading-[1.1]">
+      <h1 className="max-w-5xl text-6xl md:text-8xl font-extrabold tracking-tighter text-foreground leading-none">
         Curated colors for <br className="hidden md:block" /> digital artisans.
       </h1>
       <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl leading-relaxed font-light">
