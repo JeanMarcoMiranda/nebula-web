@@ -6,13 +6,15 @@ import { CSSProperties } from "react";
 
 interface ThemeScopeProps {
   children: React.ReactNode;
+  forcedTheme?: "light" | "dark";
 }
 
-export function ThemeScope({ children }: ThemeScopeProps) {
+export function ThemeScope({ children, forcedTheme }: ThemeScopeProps) {
   const { colors } = usePaletteStore();
   const { theme, systemTheme } = useTheme();
 
-  const currentTheme = theme === "system" ? systemTheme : theme;
+  const currentTheme =
+    forcedTheme || (theme === "system" ? systemTheme : theme);
   const isDark = currentTheme === "dark";
   const mode = isDark ? "darkHex" : "lightHex";
 

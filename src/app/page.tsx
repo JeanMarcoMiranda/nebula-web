@@ -4,7 +4,7 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { ColorPalette } from "@/components/ColorPalette";
 import { ThemePreview } from "@/components/ThemePreview";
-import { ThemeScope } from "@/components/ThemeSynchronizer";
+// ThemeScope import removed
 import { usePaletteStore } from "@/store/usePaletteStore";
 
 export default function Home() {
@@ -24,9 +24,7 @@ export default function Home() {
             </div>
           ) : (
             <div className="animate-in fade-in zoom-in-95 duration-500 border rounded-xl p-6 md:p-12 bg-card/50 backdrop-blur-sm">
-              <ThemeScope>
-                <ThemePreview />
-              </ThemeScope>
+              <ThemePreview />
             </div>
           )}
         </div>
