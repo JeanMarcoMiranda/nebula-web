@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import { PaletteControls } from "@/components/PaletteControls";
 
 export function ColorPalette() {
-  const { colors, generatePalette, toggleLock } = usePaletteStore();
+  const { generatePalette } = usePaletteStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -35,14 +35,29 @@ export function ColorPalette() {
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [generatePalette]);
 
+  if (!mounted) return null;
+
+  return (
+    <div className="w-full max-w-screen-2xl mx-auto flex flex-col gap-[var(--spacing-section)] px-4 md:px-8 pb-32">
+      <PaletteControls />
+
+      <div className="flex flex-col gap-[var(--spacing-section)]">
+        <PaletteStrip mode="light" />
+        <PaletteStrip mode="dark" />
+      </div>
+    </div>
+  );
+}
+
+function PaletteStrip({ mode }: { mode: "light" | "dark" }) {
+  const { colors, toggleLock } = usePaletteStore();
+
   const copyToClipboard = async (hex: string) => {
     await navigator.clipboard.writeText(hex);
     toast.success(`Copied ${hex} to clipboard`);
   };
 
-  if (!mounted) return null;
-
-  const PaletteStrip = ({ mode }: { mode: "light" | "dark" }) => (
+  return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2 mb-2 opacity-50 hover:opacity-100 transition-opacity">
         {mode === "light" ? (
@@ -101,17 +116,6 @@ export function ColorPalette() {
             </div>
           );
         })}
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="w-full max-w-screen-2xl mx-auto flex flex-col gap-16 px-4 md:px-8 pb-32">
-      <PaletteControls />
-
-      <div className="flex flex-col gap-16">
-        <PaletteStrip mode="light" />
-        <PaletteStrip mode="dark" />
       </div>
     </div>
   );

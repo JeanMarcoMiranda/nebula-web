@@ -14,7 +14,7 @@ export default function Home() {
     <main className="min-h-screen w-full bg-background relative selection:bg-primary/20">
       <Header />
 
-      <div className="flex flex-col gap-12 pb-32">
+      <div className="flex flex-col gap-[var(--spacing-macro)] pb-32">
         <Hero />
 
         <div className="px-4 md:px-8 w-full max-w-screen-2xl mx-auto">
