@@ -11,4 +11,6 @@ export interface PaletteState {
   toggleLock: (id: string) => void;
   updateColor: (id: string, newHex: string, mode: "light" | "dark") => void;
   setColors: (colors: ColorNode[]) => void;
+  paletteSize: number;
+  setPaletteSize: (size: number) => void;
 }

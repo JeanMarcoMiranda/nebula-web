@@ -8,6 +8,7 @@ import {
 } from "@/lib/colors";
 
 export const usePaletteStore = create<PaletteState>((set) => ({
+  paletteSize: 5,
   colors: Array.from({ length: 5 }).map(() => {
     const baseColor = generateRandomHex();
     return {
@@ -48,4 +49,25 @@ export const usePaletteStore = create<PaletteState>((set) => ({
     })),
 
   setColors: (newColors) => set({ colors: newColors }),
+
+  setPaletteSize: (size) =>
+    set((state) => {
+      if (size === state.paletteSize) return state;
+      if (size > state.paletteSize) {
+        const newColors = Array.from({ length: size - state.paletteSize }).map(
+          () => {
+            const baseColor = generateRandomHex();
+            return {
+              id: nanoid(),
+              lightHex: baseColor,
+              darkHex: generateThemeVariant(baseColor),
+              isLocked: false,
+            };
+          },
+        );
+        return { paletteSize: size, colors: [...state.colors, ...newColors] };
+      } else {
+        return { paletteSize: size, colors: state.colors.slice(0, size) };
+      }
+    }),
 }));
