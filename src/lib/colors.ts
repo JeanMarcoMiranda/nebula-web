@@ -1,7 +1,8 @@
 import { colord, extend } from "colord";
 import a11yPlugin from "colord/plugins/a11y";
+import harmoniesPlugin from "colord/plugins/harmonies";
 
-extend([a11yPlugin]);
+extend([a11yPlugin, harmoniesPlugin]);
 
 export const generateRandomHex = () => {
   return colord({
@@ -22,8 +23,11 @@ export const isValidHex = (color: string) => {
 export const getHarmonies = (color: string) => {
   const c = colord(color);
   return {
-    complementary: c.complement().toHex(),
-    analogous: c.reorder(({ s, l }) => ({ h: (c.toHsl().h + 30) % 360, s, l })).toHex(),
-    triadic: c.reorder(({ s, l }) => ({ h: (c.toHsl().h + 120) % 360, s, l })).toHex(),
+    complementary: c.harmonies("complementary").map(c => c.toHex()),
+    analogous: c.harmonies("analogous").map(c => c.toHex()),
+    triadic: c.harmonies("triadic").map(c => c.toHex()),
+    splitComplementary: c.harmonies("split-complementary").map(c => c.toHex()),
+    tetradic: c.harmonies("tetradic").map(c => c.toHex()),
+    rectangle: c.harmonies("rectangle").map(c => c.toHex()),
   };
 };
