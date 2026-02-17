@@ -13,21 +13,23 @@ export const usePaletteStore = create<PaletteState>((set) => ({
   generatePalette: () =>
     set((state) => ({
       colors: state.colors.map((color) =>
-        color.isLocked ? color : { ...color, hex: generateRandomHex() }
+        color.isLocked ? color : { ...color, hex: generateRandomHex() },
       ),
     })),
 
   toggleLock: (id) =>
     set((state) => ({
       colors: state.colors.map((color) =>
-        color.id === id ? { ...color, isLocked: !color.isLocked } : color
+        color.id === id ? { ...color, isLocked: !color.isLocked } : color,
       ),
     })),
 
   updateColor: (id, newHex) =>
     set((state) => ({
       colors: state.colors.map((color) =>
-        color.id === id && isValidHex(newHex) ? { ...color, hex: newHex } : color
+        color.id === id && isValidHex(newHex)
+          ? { ...color, hex: newHex }
+          : color,
       ),
     })),
 
