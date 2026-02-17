@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Download, SlidersHorizontal } from "lucide-react";
+import { Download, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 
 export function PaletteControls() {
@@ -33,34 +33,53 @@ export function PaletteControls() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 p-4 bg-muted/30 rounded-lg items-center justify-between w-full">
-      <div className="flex items-center gap-4 w-full md:w-auto">
-        <span className="text-sm font-medium whitespace-nowrap">
-          Palette Size: {paletteSize}
-        </span>
+    <div className="flex flex-col md:flex-row gap-8 items-end md:items-center justify-between w-full max-w-screen-xl mx-auto px-2">
+      <div className="flex flex-col gap-4 w-full md:w-1/3">
+        <div className="flex justify-between items-center bg-transparent">
+          <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+            Palette Size
+          </span>
+          <span className="text-sm font-mono text-foreground">
+            {paletteSize}
+          </span>
+        </div>
         <Slider
           value={[paletteSize]}
           min={3}
           max={12}
           step={1}
           onValueChange={(val: number[]) => setPaletteSize(val[0])}
-          className="w-full md:w-[200px]"
+          className="py-2"
         />
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex items-center gap-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
-              <Download className="w-4 h-4 mr-2" />
+            <Button
+              variant="outline"
+              size="lg"
+              className="rounded-full px-6 border-border/60 hover:bg-secondary/50 transition-all duration-300"
+            >
+              <Download className="w-4 h-4 mr-2 opacity-70" />
               Export
+              <ChevronDown className="w-3 h-3 ml-2 opacity-50" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => handleExport("css")}>
+          <DropdownMenuContent
+            align="end"
+            className="w-[160px] rounded-xl p-2 animate-in fade-in-0 zoom-in-95 duration-200"
+          >
+            <DropdownMenuItem
+              onClick={() => handleExport("css")}
+              className="rounded-lg cursor-pointer"
+            >
               Copy as CSS
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleExport("json")}>
+            <DropdownMenuItem
+              onClick={() => handleExport("json")}
+              className="rounded-lg cursor-pointer"
+            >
               Copy as JSON
             </DropdownMenuItem>
           </DropdownMenuContent>

@@ -5,7 +5,7 @@ import { getContrastColor } from "@/lib/colors";
 import { Copy, Lock, Unlock, RefreshCw, Sun, Moon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Tooltip,
   TooltipContent,
@@ -42,111 +42,87 @@ export function ColorPalette() {
 
   if (!mounted) return null;
 
-  const PaletteRow = ({ mode }: { mode: "light" | "dark" }) => (
-    <Card className="border-border/50 shadow-sm">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-xl capitalize flex items-center gap-2">
-          {mode === "light" ? (
-            <Sun className="w-5 h-5 text-orange-500" />
-          ) : (
-            <Moon className="w-5 h-5 text-indigo-400" />
-          )}
+  const PaletteStrip = ({ mode }: { mode: "light" | "dark" }) => (
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-2 mb-2 opacity-50 hover:opacity-100 transition-opacity">
+        {mode === "light" ? (
+          <Sun className="w-4 h-4" />
+        ) : (
+          <Moon className="w-4 h-4" />
+        )}
+        <span className="text-sm font-medium uppercase tracking-widest">
           {mode} Variant
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="w-full h-[250px] md:h-[300px] flex flex-col md:flex-row shadow-inner rounded-xl overflow-hidden ring-1 ring-border/20">
-          {colors.map((color) => {
-            const hex = mode === "light" ? color.lightHex : color.darkHex;
-            const textColor = getContrastColor(hex);
+        </span>
+      </div>
 
-            return (
-              <div
-                key={`${color.id}-${mode}`}
-                className="group relative flex-1 flex flex-col items-center justify-center transition-all duration-500 ease-out hover:flex-[1.5]"
-                style={{ backgroundColor: hex, color: textColor }}
-              >
-                <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center gap-2 md:gap-4 translate-y-4 group-hover:translate-y-0">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => toggleLock(color.id)}
-                        className="rounded-full bg-black/10 hover:bg-black/20 text-inherit hover:text-inherit backdrop-blur-md transition-all transform hover:scale-110 h-10 w-10 md:h-12 md:w-12"
-                      >
-                        {color.isLocked ? (
-                          <Lock className="w-4 h-4 md:w-5 md:h-5" />
-                        ) : (
-                          <Unlock className="w-4 h-4 md:w-5 md:h-5" />
-                        )}
-                        <span className="sr-only">
-                          {color.isLocked ? "Unlock" : "Lock"}
-                        </span>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{color.isLocked ? "Unlock color" : "Lock color"}</p>
-                    </TooltipContent>
-                  </Tooltip>
+      <div className="flex flex-col md:flex-row gap-0 rounded-2xl overflow-hidden ring-1 ring-border/20 shadow-sm">
+        {colors.map((color) => {
+          const hex = mode === "light" ? color.lightHex : color.darkHex;
+          const textColor = getContrastColor(hex);
 
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => copyToClipboard(hex)}
-                        className="rounded-full bg-black/10 hover:bg-black/20 text-inherit hover:text-inherit backdrop-blur-md transition-all transform hover:scale-110 h-10 w-10 md:h-12 md:w-12"
-                      >
-                        <Copy className="w-4 h-4 md:w-5 md:h-5" />
-                        <span className="sr-only">Copy hex</span>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Copy to clipboard</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-
-                <div className="absolute bottom-6 md:bottom-8 flex flex-col items-center gap-1 md:gap-2 pointer-events-none">
-                  <span className="text-sm md:text-lg font-mono font-medium tracking-wider uppercase select-none">
-                    {hex}
-                  </span>
-                  {color.isLocked && (
-                    <div className="bg-black/20 backdrop-blur-sm p-1 md:p-1.5 rounded-full">
-                      <Lock className="w-2.5 h-2.5 md:w-3 md:h-3 text-inherit opacity-70" />
-                    </div>
+          return (
+            <div
+              key={`${color.id}-${mode}`}
+              className="relative flex-1 h-[120px] md:h-[300px] flex flex-col items-center justify-center transition-all duration-500 ease-out hover:flex-[1.5] group"
+              style={{ backgroundColor: hex, color: textColor }}
+            >
+              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => toggleLock(color.id)}
+                  className="h-8 w-8 rounded-full bg-black/10 hover:bg-black/20 text-inherit hover:text-inherit backdrop-blur-md"
+                >
+                  {color.isLocked ? (
+                    <Lock className="w-3 h-3" />
+                  ) : (
+                    <Unlock className="w-3 h-3" />
                   )}
-                </div>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => copyToClipboard(hex)}
+                  className="h-8 w-8 rounded-full bg-black/10 hover:bg-black/20 text-inherit hover:text-inherit backdrop-blur-md"
+                >
+                  <Copy className="w-3 h-3" />
+                </Button>
               </div>
-            );
-          })}
-        </div>
-      </CardContent>
-    </Card>
+
+              <span className="absolute bottom-4 md:bottom-8 font-mono text-xs md:text-sm tracking-wider opacity-90 select-none uppercase">
+                {hex}
+              </span>
+
+              {color.isLocked && (
+                <div className="absolute top-4 right-4 md:hidden">
+                  <Lock className="w-3 h-3 opacity-50" />
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 
   return (
-    <div className="w-full max-w-screen-2xl mx-auto flex flex-col gap-12">
-      <div className="flex justify-center items-center px-4">
+    <div className="w-full max-w-screen-2xl mx-auto flex flex-col gap-16 px-4 md:px-8 pb-32">
+      <div className="flex justify-center">
         <Button
           onClick={generatePalette}
-          variant="default"
           size="lg"
-          className="shadow-lg hover:shadow-xl transition-all"
+          className="rounded-full px-12 h-14 text-lg shadow-lg hover:shadow-primary/20 hover:scale-105 transition-all duration-300"
         >
-          <RefreshCw className="mr-2 h-4 w-4" /> Generate Palette
+          <RefreshCw className="mr-2 h-5 w-5" /> Generate Palette
         </Button>
       </div>
 
       <PaletteControls />
 
-      <TooltipProvider>
-        <div className="flex flex-col gap-12">
-          <PaletteRow mode="light" />
-          <PaletteRow mode="dark" />
-        </div>
-      </TooltipProvider>
+      <div className="flex flex-col gap-16">
+        <PaletteStrip mode="light" />
+        <PaletteStrip mode="dark" />
+      </div>
     </div>
   );
 }

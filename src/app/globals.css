@@ -6,8 +6,10 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   
-  /* Macro Spacing for Minimalist Design */
-  --spacing-macro: 120px;
+  /* Minimalist Spacing System */
+  --spacing-macro: 160px; /* Reduced from 120-160px range to a solid 160px for impact */
+  --spacing-section: 120px;
+  --spacing-micro: 4px;
   
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -34,7 +36,7 @@
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
   
-  /* Typography */
+  /* Typography - Inter is standard, but we'll enforce weights in utilities */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -42,7 +44,7 @@
 :root {
   --radius: 0.5rem;
   
-  /* Base Neutrals (Minimalist: White Background, Dark Gray Text) */
+  /* Base Neutrals (Strict Minimalist: White & Black) */
   --background: #ffffff;
   --foreground: #111111;
   
@@ -52,15 +54,15 @@
   --popover: #ffffff;
   --popover-foreground: #111111;
   
-  /* Accent (Electric Blue/Violet for CTAs only) */
-  --primary: #4F46E5; 
+  /* Accent: Electric Blue (Single color for CTAs) */
+  --primary: #2563EB; 
   --primary-foreground: #ffffff;
   
-  /* Utilities & Secondary Actions */
+  /* Secondary / Muted - Soft Grays */
   --secondary: #f4f4f5;
   --secondary-foreground: #18181b;
   
-  --muted: #f4f4f5;
+  --muted: #fafafa;
   --muted-foreground: #71717a;
   
   --accent: #f4f4f5;
@@ -71,9 +73,9 @@
   
   --border: #e4e4e7;
   --input: #e4e4e7;
-  --ring: #4F46E5;
+  --ring: #2563EB;
   
-  --chart-1: #4F46E5;
+  --chart-1: #2563EB;
   --chart-2: #111111;
   --chart-3: #71717a;
   --chart-4: #e4e4e7;
@@ -81,26 +83,27 @@
 }
 
 .dark {
-  /* Minimalist Dark Mode (Black Background, White Text) */
-  --background: #09090b;
+  /* Minimalist Dark Mode (Rich Black, not gray) */
+  --background: #050505;
   --foreground: #fafafa;
   
-  --card: #09090b;
+  --card: #0a0a0a;
   --card-foreground: #fafafa;
   
-  --popover: #09090b;
+  --popover: #0a0a0a;
   --popover-foreground: #fafafa;
   
-  --primary: #6366f1;
+  /* Accent: Electric Violet/Blue for Dark Mode */
+  --primary: #4F46E5;
   --primary-foreground: #ffffff;
   
-  --secondary: #27272a;
+  --secondary: #18181b;
   --secondary-foreground: #fafafa;
   
-  --muted: #27272a;
+  --muted: #18181b;
   --muted-foreground: #a1a1aa;
   
-  --accent: #27272a;
+  --accent: #18181b;
   --accent-foreground: #fafafa;
   
   --destructive: #7f1d1d;
@@ -108,9 +111,9 @@
   
   --border: #27272a;
   --input: #27272a;
-  --ring: #6366f1;
+  --ring: #4F46E5;
   
-  --chart-1: #6366f1;
+  --chart-1: #4F46E5;
   --chart-2: #fafafa;
   --chart-3: #a1a1aa;
   --chart-4: #27272a;
@@ -123,5 +126,12 @@
   }
   body {
     @apply bg-background text-foreground antialiased;
+    /* Enforce 1.6 - 1.8 line height for body text */
+    line-height: 1.7; 
+  }
+  h1, h2, h3, h4, h5, h6 {
+    /* Headings often need tighter leading */
+    line-height: 1.1; 
+    letter-spacing: -0.02em;
   }
 }
