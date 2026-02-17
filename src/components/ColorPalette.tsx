@@ -107,16 +107,6 @@ export function ColorPalette() {
 
   return (
     <div className="w-full max-w-screen-2xl mx-auto flex flex-col gap-16 px-4 md:px-8 pb-32">
-      <div className="flex justify-center">
-        <Button
-          onClick={generatePalette}
-          size="lg"
-          className="rounded-full px-12 h-14 text-lg shadow-lg hover:shadow-primary/20 hover:scale-105 transition-all duration-300"
-        >
-          <RefreshCw className="mr-2 h-5 w-5" /> Generate Palette
-        </Button>
-      </div>
-
       <PaletteControls />
 
       <div className="flex flex-col gap-16">

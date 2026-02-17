@@ -6,8 +6,8 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   
-  /* Minimalist Spacing System */
-  --spacing-macro: 160px; /* Reduced from 120-160px range to a solid 160px for impact */
+  /* Minimalist Spacing System - Macro Space Rule */
+  --spacing-macro: 160px; 
   --spacing-section: 120px;
   --spacing-micro: 4px;
   
@@ -36,7 +36,7 @@
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
   
-  /* Typography - Inter is standard, but we'll enforce weights in utilities */
+  /* Typography - Enforce Clarity */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -44,25 +44,31 @@
 :root {
   --radius: 0.5rem;
   
-  /* Base Neutrals (Strict Minimalist: White & Black) */
+  /* 
+     RULE 3: Paleta de Colores Restringida
+     Base Neutra: White (90% interface)
+  */
   --background: #ffffff;
-  --foreground: #111111;
+  --foreground: #09090b; /* Deep Black for text */
   
   --card: #ffffff;
-  --card-foreground: #111111;
+  --card-foreground: #09090b;
   
   --popover: #ffffff;
-  --popover-foreground: #111111;
+  --popover-foreground: #09090b;
   
-  /* Accent: Electric Blue (Single color for CTAs) */
+  /* 
+     RULE 3: Acento Único
+     "Azul eléctrico" solely for CTAs
+  */
   --primary: #2563EB; 
   --primary-foreground: #ffffff;
   
-  /* Secondary / Muted - Soft Grays */
+  /* Secondary actions - Ghost/Subtle */
   --secondary: #f4f4f5;
   --secondary-foreground: #18181b;
   
-  --muted: #fafafa;
+  --muted: #f4f4f5;
   --muted-foreground: #71717a;
   
   --accent: #f4f4f5;
@@ -83,18 +89,21 @@
 }
 
 .dark {
-  /* Minimalist Dark Mode (Rich Black, not gray) */
-  --background: #050505;
+  /* 
+     RULE 3: Paleta de Colores Restringida (Dark Mode)
+     Base Neutra: Deep Black (90% interface)
+  */
+  --background: #050505; /* Pure/Deep Black */
   --foreground: #fafafa;
   
-  --card: #0a0a0a;
+  --card: #050505;
   --card-foreground: #fafafa;
   
-  --popover: #0a0a0a;
+  --popover: #050505;
   --popover-foreground: #fafafa;
   
-  /* Accent: Electric Violet/Blue for Dark Mode */
-  --primary: #4F46E5;
+  /* Accent for Dark Mode */
+  --primary: #4F46E5; /* Slightly lighter/vibrant for dark bg */
   --primary-foreground: #ffffff;
   
   --secondary: #18181b;
@@ -126,12 +135,20 @@
   }
   body {
     @apply bg-background text-foreground antialiased;
-    /* Enforce 1.6 - 1.8 line height for body text */
+    /* 
+       RULE 2: Tipografía
+       Cuerpo: 16px - 18px con interlineado generoso (1.6 - 1.8) 
+    */
+    font-size: 16px;
     line-height: 1.7; 
   }
   h1, h2, h3, h4, h5, h6 {
-    /* Headings often need tighter leading */
+    /* 
+       RULE 2: Jerarquía Extrema 
+       Títulos grandes y pesados o ligeros
+    */
     line-height: 1.1; 
     letter-spacing: -0.02em;
+    font-weight: 700; /* Bold/Black */
   }
 }

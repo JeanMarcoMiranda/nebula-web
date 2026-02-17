@@ -57,11 +57,11 @@ export function PaletteControls() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
-              variant="outline"
+              variant="ghost"
               size="lg"
-              className="rounded-full px-6 border-border/60 hover:bg-secondary/50 transition-all duration-300"
+              className="rounded-full px-6 hover:bg-secondary/80 transition-all duration-300 font-medium text-muted-foreground hover:text-foreground"
             >
-              <Download className="w-4 h-4 mr-2 opacity-70" />
+              <Download className="w-4 h-4 mr-2" />
               Export
               <ChevronDown className="w-3 h-3 ml-2 opacity-50" />
             </Button>
