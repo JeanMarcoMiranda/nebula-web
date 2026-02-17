@@ -1,8 +1,11 @@
+import { ColorStrategy } from "@/lib/paletteGenerator";
+
 export interface ColorNode {
   id: string;
   lightHex: string;
   darkHex: string;
   isLocked: boolean;
+  role?: "primary" | "secondary" | "accent" | "muted" | "ring";
 }
 
 export interface PaletteState {
@@ -15,4 +18,6 @@ export interface PaletteState {
   setPaletteSize: (size: number) => void;
   view: "generator" | "preview";
   setView: (view: "generator" | "preview") => void;
+  strategy: ColorStrategy;
+  setStrategy: (strategy: ColorStrategy) => void;
 }

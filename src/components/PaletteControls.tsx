@@ -8,12 +8,16 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Download, ChevronDown } from "lucide-react";
+import { Download, ChevronDown, Palette } from "lucide-react";
 import { toast } from "sonner";
+import { ColorStrategy } from "@/lib/paletteGenerator";
 
 export function PaletteControls() {
-  const { paletteSize, setPaletteSize, colors } = usePaletteStore();
+  const { paletteSize, setPaletteSize, colors, strategy, setStrategy } =
+    usePaletteStore();
 
   const handleExport = (format: "json" | "css") => {
     let content = "";
@@ -30,6 +34,15 @@ export function PaletteControls() {
 
     navigator.clipboard.writeText(content);
     toast.success(`Copied ${format.toUpperCase()} to clipboard`);
+  };
+
+  const strategyLabels: Record<ColorStrategy, string> = {
+    monochromatic: "Monochromatic",
+    analogous: "Analogous",
+    complementary: "Complementary",
+    triadic: "Triadic",
+    "split-complementary": "Split Complementary",
+    tetradic: "Tetradic",
   };
 
   return (
@@ -54,6 +67,42 @@ export function PaletteControls() {
       </div>
 
       <div className="flex items-center gap-4">
+        {/* Strategy Selector */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              size="lg"
+              className="rounded-full px-6 transition-all duration-300 font-medium"
+            >
+              <Palette className="w-4 h-4 mr-2" />
+              {strategyLabels[strategy]}
+              <ChevronDown className="w-3 h-3 ml-2 opacity-50" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            className="w-[220px] rounded-xl p-2 animate-in fade-in-0 zoom-in-95 duration-200"
+          >
+            <DropdownMenuLabel className="text-xs text-muted-foreground uppercase tracking-wider">
+              Color Harmony
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {Object.entries(strategyLabels).map(([key, label]) => (
+              <DropdownMenuItem
+                key={key}
+                onClick={() => setStrategy(key as ColorStrategy)}
+                className={`rounded-lg cursor-pointer ${
+                  strategy === key ? "bg-accent" : ""
+                }`}
+              >
+                {label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Export Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
