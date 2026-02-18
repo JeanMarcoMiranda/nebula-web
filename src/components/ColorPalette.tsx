@@ -2,16 +2,10 @@
 
 import { usePaletteStore } from "@/store/usePaletteStore";
 import { getContrastColor } from "@/lib/colors";
-import { Copy, Lock, Unlock, RefreshCw, Sun, Moon } from "lucide-react";
+import { Copy, Lock, Unlock, Sun, Moon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 import { toast } from "sonner";
 import { PaletteControls } from "@/components/PaletteControls";
 

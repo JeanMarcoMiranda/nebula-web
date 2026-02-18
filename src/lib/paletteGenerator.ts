@@ -8,16 +8,22 @@ export type ColorStrategy =
   | "split-complementary"
   | "tetradic";
 
+// All possible role names in order of priority
+export const COLOR_ROLES = [
+  "primary",
+  "secondary",
+  "accent",
+  "muted",
+  "ring",
+  "tertiary",
+] as const;
+
+export type ColorRole = (typeof COLOR_ROLES)[number];
+
 export interface UIColorScheme {
   name: string;
   description: string;
-  colors: {
-    primary: { light: string; dark: string };
-    secondary: { light: string; dark: string };
-    accent: { light: string; dark: string };
-    muted: { light: string; dark: string };
-    ring: { light: string; dark: string };
-  };
+  colors: Record<ColorRole, { light: string; dark: string }>;
 }
 
 /**
@@ -47,6 +53,7 @@ function generateMonochromatic(baseColor: string): string[] {
     colord({ h: hsl.h, s: Math.min(100, hsl.s * 1.1), l: 55 }).toHex(), // accent
     colord({ h: hsl.h, s: hsl.s * 0.3, l: 70 }).toHex(), // muted
     colord({ h: hsl.h, s: hsl.s, l: 50 }).toHex(), // ring
+    colord({ h: hsl.h, s: hsl.s * 0.8, l: 45 }).toHex(), // tertiary
   ];
 }
 
@@ -68,6 +75,7 @@ function generateAnalogous(baseColor: string): string[] {
     }).toHex(), // accent
     colord({ h: hsl.h, s: hsl.s * 0.3, l: 70 }).toHex(), // muted
     baseColor, // ring
+    colord({ h: (hsl.h + 15) % 360, s: hsl.s * 0.9, l: hsl.l * 0.9 }).toHex(), // tertiary
   ];
 }
 
@@ -86,6 +94,7 @@ function generateComplementary(baseColor: string): string[] {
     colord({ h: complementHue, s: hsl.s, l: hsl.l }).toHex(), // accent
     colord({ h: hsl.h, s: hsl.s * 0.3, l: 70 }).toHex(), // muted
     baseColor, // ring
+    colord({ h: complementHue, s: hsl.s * 0.7, l: 60 }).toHex(), // tertiary
   ];
 }
 
@@ -103,6 +112,7 @@ function generateTriadic(baseColor: string): string[] {
     colord({ h: (hsl.h + 240) % 360, s: hsl.s, l: hsl.l }).toHex(), // accent
     colord({ h: hsl.h, s: hsl.s * 0.3, l: 70 }).toHex(), // muted
     baseColor, // ring
+    colord({ h: (hsl.h + 60) % 360, s: hsl.s * 0.8, l: hsl.l }).toHex(), // tertiary
   ];
 }
 
@@ -121,6 +131,7 @@ function generateSplitComplementary(baseColor: string): string[] {
     colord({ h: (complementHue - 30 + 360) % 360, s: hsl.s, l: hsl.l }).toHex(), // accent
     colord({ h: hsl.h, s: hsl.s * 0.3, l: 70 }).toHex(), // muted
     baseColor, // ring
+    colord({ h: complementHue, s: hsl.s * 0.6, l: 60 }).toHex(), // tertiary
   ];
 }
 
@@ -138,6 +149,7 @@ function generateTetradic(baseColor: string): string[] {
     colord({ h: (hsl.h + 180) % 360, s: hsl.s, l: hsl.l }).toHex(), // accent
     colord({ h: hsl.h, s: hsl.s * 0.3, l: 70 }).toHex(), // muted
     baseColor, // ring
+    colord({ h: (hsl.h + 270) % 360, s: hsl.s, l: hsl.l }).toHex(), // tertiary
   ];
 }
 
@@ -150,17 +162,10 @@ function generateDarkVariant(lightColor: string): string {
   const light = colord(lightColor);
   const hsl = light.toHsl();
 
-  // Para dark mode:
-  // - Si el color es claro (L > 50), oscurecerlo
-  // - Si el color es oscuro (L < 50), aclararlo
-  // - Reducir saturación un 20% para menos fatiga
-
   let newL: number;
   if (hsl.l > 50) {
-    // Color claro -> oscurecer para dark mode
     newL = 30 + (100 - hsl.l) * 0.4; // 30-50 range
   } else {
-    // Color oscuro -> aclarar para dark mode
     newL = 60 + hsl.l * 0.3; // 60-75 range
   }
 
@@ -170,7 +175,8 @@ function generateDarkVariant(lightColor: string): string {
 }
 
 /**
- * Genera paleta UI completa con estrategia especificada
+ * Genera paleta UI completa con estrategia especificada.
+ * Siempre genera los 6 roles posibles; el store decide cuántos usar.
  */
 export function generateUIPalette(
   strategy: ColorStrategy = "analogous",
@@ -219,30 +225,17 @@ export function generateUIPalette(
       description = "Naturally harmonious adjacent colors";
   }
 
+  // Always build all 6 roles — the store slices to paletteSize
   return {
     name,
     description,
     colors: {
-      primary: {
-        light: colors[0],
-        dark: generateDarkVariant(colors[0]),
-      },
-      secondary: {
-        light: colors[1],
-        dark: generateDarkVariant(colors[1]),
-      },
-      accent: {
-        light: colors[2],
-        dark: generateDarkVariant(colors[2]),
-      },
-      muted: {
-        light: colors[3],
-        dark: generateDarkVariant(colors[3]),
-      },
-      ring: {
-        light: colors[4],
-        dark: generateDarkVariant(colors[4]),
-      },
+      primary: { light: colors[0], dark: generateDarkVariant(colors[0]) },
+      secondary: { light: colors[1], dark: generateDarkVariant(colors[1]) },
+      accent: { light: colors[2], dark: generateDarkVariant(colors[2]) },
+      muted: { light: colors[3], dark: generateDarkVariant(colors[3]) },
+      ring: { light: colors[4], dark: generateDarkVariant(colors[4]) },
+      tertiary: { light: colors[5], dark: generateDarkVariant(colors[5]) },
     },
   };
 }

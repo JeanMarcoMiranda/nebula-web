@@ -5,7 +5,7 @@ export interface ColorNode {
   lightHex: string;
   darkHex: string;
   isLocked: boolean;
-  role?: "primary" | "secondary" | "accent" | "muted" | "ring";
+  role?: "primary" | "secondary" | "accent" | "muted" | "ring" | "tertiary";
 }
 
 export interface PaletteState {

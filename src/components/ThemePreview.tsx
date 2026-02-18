@@ -19,8 +19,8 @@ import { ArrowRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 import { ThemeScope } from "@/components/ThemeSynchronizer";
+import { COLOR_ROLES } from "@/lib/paletteGenerator";
 import { useState } from "react";
-import { Moon, Sun } from "lucide-react";
 
 export function ThemePreview() {
   const { colors } = usePaletteStore();
@@ -70,7 +70,7 @@ export function ThemePreview() {
                 </h1>
                 <p className="text-xl text-muted-foreground font-light max-w-md leading-relaxed">
                   Typography is the voice of your design. Use it to create
-                  hierarchy and guide the user's eye through the content.
+                  hierarchy and guide the user&apos;s eye through the content.
                 </p>
               </div>
 
@@ -110,12 +110,17 @@ export function ThemePreview() {
           <section className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
             <SectionHeader number="02" title="Palette" />
 
-            <div className="grid grid-cols-5 h-32 md:h-48 rounded-2xl overflow-hidden ring-1 ring-border/50">
-              {colors.slice(0, 5).map((color, i) => (
+            <div
+              className={`grid h-32 md:h-48 rounded-2xl overflow-hidden ring-1 ring-border/50`}
+              style={{
+                gridTemplateColumns: `repeat(${colors.length}, minmax(0, 1fr))`,
+              }}
+            >
+              {colors.map((color, i) => (
                 <div
                   key={color.id}
                   className="h-full flex flex-col items-center justify-end pb-6 relative group"
-                  style={{ backgroundColor: `var(--${getColorName(i)})` }}
+                  style={{ backgroundColor: `var(--${COLOR_ROLES[i]})` }}
                 >
                   <div className="bg-white/90 dark:bg-black/90 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-mono opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 shadow-sm">
                     {previewTheme === "light" ? color.lightHex : color.darkHex}
@@ -124,11 +129,11 @@ export function ThemePreview() {
               ))}
             </div>
             <div className="flex justify-between text-xs text-muted-foreground font-mono uppercase tracking-wider px-1">
-              <span>Primary</span>
-              <span>Secondary</span>
-              <span>Accent</span>
-              <span>Muted</span>
-              <span>Ring</span>
+              {colors.map((_, i) => (
+                <span key={i} className="capitalize">
+                  {COLOR_ROLES[i]}
+                </span>
+              ))}
             </div>
           </section>
 
@@ -275,9 +280,4 @@ function SectionHeader({ number, title }: { number: string; title: string }) {
       <Separator className="flex-1 bg-border/50" />
     </div>
   );
-}
-
-function getColorName(index: number) {
-  const names = ["primary", "secondary", "accent", "muted", "ring"];
-  return names[index] || "primary";
 }

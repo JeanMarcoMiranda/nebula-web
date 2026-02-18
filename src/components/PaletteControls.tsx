@@ -59,7 +59,7 @@ export function PaletteControls() {
         <Slider
           value={[paletteSize]}
           min={3}
-          max={12}
+          max={6}
           step={1}
           onValueChange={(val: number[]) => setPaletteSize(val[0])}
           className="py-2"
