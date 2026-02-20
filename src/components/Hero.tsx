@@ -130,8 +130,8 @@ export function Hero() {
                   className="group relative flex flex-col items-center gap-1.5"
                   style={{ animationDelay: `${i * 60}ms` }}
                 >
-                  {/* Hex tooltip on hover */}
-                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
+                  {/* Hex tooltip on hover — desktop only */}
+                  <div className="hidden md:block absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
                     <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-foreground text-background whitespace-nowrap shadow-md">
                       {color.lightHex}
                     </span>

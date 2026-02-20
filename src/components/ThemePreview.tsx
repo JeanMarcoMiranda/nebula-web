@@ -1,22 +1,10 @@
 "use client";
 
 import { usePaletteStore } from "@/store/usePaletteStore";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardFooter,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
+
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
-import { ArrowRight, Moon, Sun, Sparkles, Layers } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
+import { ArrowRight, Moon, Sun, Sparkles } from "lucide-react";
 import { ThemeScope } from "@/components/ThemeSynchronizer";
 import { computeForeground } from "@/components/ThemeSynchronizer";
 import { COLOR_ROLES, ROLE_META, ColorRole } from "@/lib/paletteGenerator";
@@ -503,9 +491,9 @@ export function ThemePreview() {
                 })}
               </div>
 
-              {/* Role labels row */}
+              {/* Role labels row — truncated on mobile */}
               <div
-                className="flex justify-between text-xs font-mono uppercase tracking-wider px-1"
+                className="hidden sm:flex justify-between text-xs font-mono uppercase tracking-wider px-1"
                 style={{ color: mutedFgHex }}
               >
                 {colors.map((_, i) => (
@@ -516,12 +504,7 @@ export function ThemePreview() {
               </div>
 
               {/* ── Role detail cards ─────────────────────────────────── */}
-              <div
-                className="grid gap-3"
-                style={{
-                  gridTemplateColumns: `repeat(${Math.min(colors.length, 3)}, minmax(0, 1fr))`,
-                }}
-              >
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {colors.map((color, i) => {
                   const role = COLOR_ROLES[i] as ColorRole;
                   const meta = ROLE_META[role];
@@ -947,12 +930,7 @@ export function ThemePreview() {
                 bgHex={bgHex}
               />
 
-              <div
-                className="grid gap-4"
-                style={{
-                  gridTemplateColumns: `repeat(${Math.min(colors.length, 3)}, minmax(0, 1fr))`,
-                }}
-              >
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {hexes.map((hex, i) => {
                   const role = COLOR_ROLES[i] as ColorRole;
                   const meta = ROLE_META[role];
@@ -973,7 +951,7 @@ export function ThemePreview() {
                         minHeight: "160px",
                       }}
                     >
-                      <div className="flex items-start justify-between">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <span
                           className="text-xs font-mono uppercase tracking-widest font-semibold"
                           style={{
@@ -1044,12 +1022,7 @@ export function ThemePreview() {
               </div>
 
               {/* Subtle tinted surfaces row — shows how palette colors work as bg tints */}
-              <div
-                className="grid gap-3"
-                style={{
-                  gridTemplateColumns: `repeat(${Math.min(colors.length, 3)}, minmax(0, 1fr))`,
-                }}
-              >
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {hexes.map((hex, i) => {
                   const tintBg = deriveSurface(
                     hex,

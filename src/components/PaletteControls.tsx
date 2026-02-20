@@ -55,7 +55,7 @@ export function PaletteControls() {
   const currentMeta = STRATEGY_META[strategy];
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-screen-xl mx-auto px-2">
+    <div className="flex flex-col gap-6 w-full max-w-screen-xl mx-auto">
       {/* ── Row 1: Slider + Selectors ──────────────────────────────── */}
       <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start md:items-center justify-between w-full">
         {/* Palette Size Slider */}
@@ -78,14 +78,14 @@ export function PaletteControls() {
           />
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           {/* Strategy Selector */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                size="lg"
-                className="rounded-full px-6 transition-all duration-300 font-medium"
+                size="default"
+                className="rounded-full px-4 sm:px-6 transition-all duration-300 font-medium text-sm"
               >
                 <Palette className="w-4 h-4 mr-2" />
                 {currentMeta.label}
@@ -124,8 +124,8 @@ export function PaletteControls() {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                size="lg"
-                className="rounded-full px-6 hover:bg-secondary/80 transition-all duration-300 font-medium text-muted-foreground hover:text-foreground"
+                size="default"
+                className="rounded-full px-4 sm:px-6 hover:bg-secondary/80 transition-all duration-300 font-medium text-sm text-muted-foreground hover:text-foreground"
               >
                 <Download className="w-4 h-4 mr-2" />
                 Export

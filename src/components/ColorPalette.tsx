@@ -32,10 +32,10 @@ export function ColorPalette() {
   if (!mounted) return null;
 
   return (
-    <div className="w-full max-w-screen-2xl mx-auto flex flex-col gap-[var(--spacing-section)]">
+    <div className="w-full max-w-screen-2xl mx-auto flex flex-col gap-10 md:gap-[var(--spacing-section)]">
       <PaletteControls />
 
-      <div className="flex flex-col gap-[var(--spacing-section)]">
+      <div className="flex flex-col gap-10 md:gap-[var(--spacing-section)]">
         {/* Scheme label */}
         <div className="flex items-center gap-2 px-1">
           <Sparkles className="w-3.5 h-3.5 text-primary opacity-70" />
@@ -86,15 +86,15 @@ function PaletteStrip({ mode }: { mode: "light" | "dark" }) {
           return (
             <div
               key={`${color.id}-${mode}`}
-              className="relative flex-1 h-[180px] md:h-[340px] flex flex-col justify-between transition-all duration-500 ease-out hover:flex-[1.6] group"
+              className="relative flex-1 h-24 md:h-[200px] lg:h-[340px] flex flex-col md:justify-between transition-all duration-500 ease-out md:hover:flex-[1.6] group"
               style={{ backgroundColor: hex, color: textColor }}
             >
-              {/* Top: role label (always visible) */}
-              <div className="px-4 pt-5 flex flex-col gap-1">
-                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] opacity-60 select-none">
+              {/* Top: role label */}
+              <div className="px-3 md:px-4 pt-3 md:pt-5 flex flex-col gap-1">
+                <span className="text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.18em] opacity-60 select-none">
                   {roleMeta?.label ?? role ?? ""}
                 </span>
-                {/* Role description — appears on hover */}
+                {/* Role description — appears on hover, desktop only */}
                 {roleMeta && (
                   <p className="text-xs leading-snug opacity-0 group-hover:opacity-80 transition-all duration-300 translate-y-1 group-hover:translate-y-0 max-w-[120px] line-clamp-3 hidden md:block">
                     {roleMeta.description}
@@ -127,13 +127,11 @@ function PaletteStrip({ mode }: { mode: "light" | "dark" }) {
               </div>
 
               {/* Bottom: hex value */}
-              <div className="px-4 pb-5 flex items-end justify-between">
-                <span className="font-mono text-xs md:text-sm tracking-wider opacity-90 select-none uppercase">
+              <div className="px-3 md:px-4 pb-3 md:pb-5 flex items-end justify-between">
+                <span className="font-mono text-[10px] md:text-sm tracking-wider opacity-90 select-none uppercase">
                   {hex}
                 </span>
-                {color.isLocked && (
-                  <Lock className="w-3 h-3 opacity-50 md:hidden" />
-                )}
+                {color.isLocked && <Lock className="w-3 h-3 opacity-50" />}
               </div>
 
               {/* Lock indicator top-right (desktop) */}
