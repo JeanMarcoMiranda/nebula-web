@@ -2,15 +2,15 @@
 
 import { usePaletteStore } from "@/store/usePaletteStore";
 import { getContrastColor } from "@/lib/colors";
-import { Copy, Lock, Unlock, Sun, Moon } from "lucide-react";
+import { Copy, Lock, Unlock, Sun, Moon, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-
 import { toast } from "sonner";
 import { PaletteControls } from "@/components/PaletteControls";
+import { ROLE_META, ColorRole } from "@/lib/paletteGenerator";
 
 export function ColorPalette() {
-  const { generatePalette } = usePaletteStore();
+  const { generatePalette, schemeName } = usePaletteStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -36,6 +36,18 @@ export function ColorPalette() {
       <PaletteControls />
 
       <div className="flex flex-col gap-[var(--spacing-section)]">
+        {/* Scheme label */}
+        <div className="flex items-center gap-2 px-1">
+          <Sparkles className="w-3.5 h-3.5 text-primary opacity-70" />
+          <span className="text-xs font-mono text-muted-foreground uppercase tracking-widest">
+            {schemeName} · Press{" "}
+            <kbd className="px-1 py-0.5 rounded border border-border text-[10px]">
+              Space
+            </kbd>{" "}
+            to regenerate
+          </span>
+        </div>
+
         <PaletteStrip mode="light" />
         <PaletteStrip mode="dark" />
       </div>
@@ -68,14 +80,30 @@ function PaletteStrip({ mode }: { mode: "light" | "dark" }) {
         {colors.map((color) => {
           const hex = mode === "light" ? color.lightHex : color.darkHex;
           const textColor = getContrastColor(hex);
+          const role = color.role as ColorRole | undefined;
+          const roleMeta = role ? ROLE_META[role] : null;
 
           return (
             <div
               key={`${color.id}-${mode}`}
-              className="relative flex-1 h-[160px] md:h-[320px] flex flex-col items-center justify-center transition-all duration-500 ease-out hover:flex-[1.5] group"
+              className="relative flex-1 h-[180px] md:h-[340px] flex flex-col justify-between transition-all duration-500 ease-out hover:flex-[1.6] group"
               style={{ backgroundColor: hex, color: textColor }}
             >
-              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+              {/* Top: role label (always visible) */}
+              <div className="px-4 pt-5 flex flex-col gap-1">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] opacity-60 select-none">
+                  {roleMeta?.label ?? role ?? ""}
+                </span>
+                {/* Role description — appears on hover */}
+                {roleMeta && (
+                  <p className="text-xs leading-snug opacity-0 group-hover:opacity-80 transition-all duration-300 translate-y-1 group-hover:translate-y-0 max-w-[120px] line-clamp-3 hidden md:block">
+                    {roleMeta.description}
+                  </p>
+                )}
+              </div>
+
+              {/* Center: action buttons */}
+              <div className="flex gap-2 justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
                 <Button
                   variant="ghost"
                   size="icon"
@@ -98,12 +126,19 @@ function PaletteStrip({ mode }: { mode: "light" | "dark" }) {
                 </Button>
               </div>
 
-              <span className="absolute bottom-4 md:bottom-8 font-mono text-xs md:text-sm tracking-wider opacity-90 select-none uppercase">
-                {hex}
-              </span>
+              {/* Bottom: hex value */}
+              <div className="px-4 pb-5 flex items-end justify-between">
+                <span className="font-mono text-xs md:text-sm tracking-wider opacity-90 select-none uppercase">
+                  {hex}
+                </span>
+                {color.isLocked && (
+                  <Lock className="w-3 h-3 opacity-50 md:hidden" />
+                )}
+              </div>
 
+              {/* Lock indicator top-right (desktop) */}
               {color.isLocked && (
-                <div className="absolute top-4 right-4 md:hidden">
+                <div className="absolute top-4 right-4 hidden md:block">
                   <Lock className="w-3 h-3 opacity-50" />
                 </div>
               )}

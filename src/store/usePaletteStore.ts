@@ -29,6 +29,11 @@ export const usePaletteStore = create<PaletteState>((set) => ({
   paletteSize: INITIAL_SIZE,
   colors: initialColors,
   strategy: "analogous",
+  schemeName: initialScheme.name,
+  schemeDescription: initialScheme.description,
+  schemeMood: initialScheme.mood,
+  schemeUseCases: initialScheme.useCases,
+  schemeTags: initialScheme.tags,
 
   setStrategy: (strategy: ColorStrategy) => set({ strategy }),
 
@@ -43,6 +48,11 @@ export const usePaletteStore = create<PaletteState>((set) => ({
           if (color.isLocked) return color;
           return newColors[index] || color;
         }),
+        schemeName: scheme.name,
+        schemeDescription: scheme.description,
+        schemeMood: scheme.mood,
+        schemeUseCases: scheme.useCases,
+        schemeTags: scheme.tags,
       };
     }),
 
@@ -68,20 +78,24 @@ export const usePaletteStore = create<PaletteState>((set) => ({
     set((state) => {
       if (size === state.paletteSize) return state;
 
-      // Generate a fresh full scheme to pick colors from
       const scheme = generateUIPalette(state.strategy);
       const allNewColors = schemeToColorNodes(scheme, size);
 
       if (size > state.paletteSize) {
-        // Keep existing colors (with locks), append new ones for extra slots
         const extended = allNewColors.map((newColor, index) => {
           const existing = state.colors[index];
-          // Preserve existing color (locked or not) for slots that already existed
           return existing ?? newColor;
         });
-        return { paletteSize: size, colors: extended };
+        return {
+          paletteSize: size,
+          colors: extended,
+          schemeName: scheme.name,
+          schemeDescription: scheme.description,
+          schemeMood: scheme.mood,
+          schemeUseCases: scheme.useCases,
+          schemeTags: scheme.tags,
+        };
       } else {
-        // Shrink: just slice, preserving locks
         return { paletteSize: size, colors: state.colors.slice(0, size) };
       }
     }),

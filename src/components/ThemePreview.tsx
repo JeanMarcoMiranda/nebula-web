@@ -15,14 +15,21 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
-import { ArrowRight, Moon, Sun } from "lucide-react";
+import { ArrowRight, Moon, Sun, Sparkles } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { ThemeScope } from "@/components/ThemeSynchronizer";
-import { COLOR_ROLES } from "@/lib/paletteGenerator";
+import { COLOR_ROLES, ROLE_META, ColorRole } from "@/lib/paletteGenerator";
 import { useState } from "react";
 
 export function ThemePreview() {
-  const { colors } = usePaletteStore();
+  const {
+    colors,
+    schemeName,
+    schemeDescription,
+    schemeMood,
+    schemeUseCases,
+    schemeTags,
+  } = usePaletteStore();
   const [previewTheme, setPreviewTheme] = useState<"light" | "dark">("light");
   const isDark = previewTheme === "dark";
 
@@ -38,7 +45,7 @@ export function ThemePreview() {
         forcedTheme={previewTheme}
         className="relative rounded-3xl overflow-hidden border transition-all duration-500"
       >
-        {/* 
+        {/*
           No extra `.dark` class here — ThemeScope already handles it.
           We only use inline styles for things that aren't CSS-var-based.
         */}
@@ -116,6 +123,91 @@ export function ThemePreview() {
 
           {/* ── Preview Content ───────────────────────────────────────── */}
           <div className="w-full flex flex-col gap-[var(--spacing-macro)] px-8 md:px-16 py-16 md:py-20">
+            {/* ══ PALETTE INFO PANEL ══════════════════════════════════════ */}
+            <section
+              className="rounded-2xl border p-6 md:p-8 flex flex-col gap-5 animate-in fade-in slide-in-from-bottom-6 duration-700"
+              style={{
+                borderColor: "var(--border)",
+                backgroundColor: isDark
+                  ? "rgba(255,255,255,0.03)"
+                  : "rgba(0,0,0,0.015)",
+              }}
+            >
+              {/* Label row */}
+              <div className="flex items-center gap-2">
+                <Sparkles
+                  className="w-3.5 h-3.5"
+                  style={{ color: "var(--primary)" }}
+                />
+                <span
+                  className="text-xs font-semibold uppercase tracking-widest"
+                  style={{ color: "var(--primary)" }}
+                >
+                  Active Palette
+                </span>
+              </div>
+
+              {/* Name + Description */}
+              <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-12">
+                <div className="flex flex-col gap-2 flex-1">
+                  <h3
+                    className="text-2xl font-bold tracking-tight"
+                    style={{ color: "var(--foreground)" }}
+                  >
+                    {schemeName}
+                  </h3>
+                  <p
+                    className="text-sm leading-relaxed max-w-2xl"
+                    style={{ color: "var(--muted-foreground)" }}
+                  >
+                    {schemeDescription}
+                  </p>
+                </div>
+                {/* Mood */}
+                <div
+                  className="flex flex-col gap-1 shrink-0"
+                  style={{ color: "var(--muted-foreground)" }}
+                >
+                  <span className="text-[10px] font-mono uppercase tracking-widest opacity-60">
+                    Mood
+                  </span>
+                  <span className="text-sm font-medium">{schemeMood}</span>
+                </div>
+              </div>
+
+              {/* Tags + Use Cases */}
+              <div className="flex flex-wrap gap-2">
+                {schemeTags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-2.5 py-0.5 rounded-full text-xs font-medium border"
+                    style={{
+                      borderColor: "var(--primary)",
+                      color: "var(--primary)",
+                    }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+                <span
+                  className="h-5 w-px mx-1 self-center"
+                  style={{ backgroundColor: "var(--border)" }}
+                />
+                {schemeUseCases.map((uc) => (
+                  <span
+                    key={uc}
+                    className="px-2.5 py-0.5 rounded-full text-xs font-medium"
+                    style={{
+                      backgroundColor: "var(--secondary)",
+                      color: "var(--muted-foreground)",
+                    }}
+                  >
+                    {uc}
+                  </span>
+                ))}
+              </div>
+            </section>
+
             {/* SECTION 1: TYPOGRAPHY */}
             <section className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
               <SectionHeader number="01" title="Typography" />
@@ -160,7 +252,7 @@ export function ThemePreview() {
                       </span>
                       <p className={cls} style={{ color: "var(--foreground)" }}>
                         {label === "Body"
-                          ? "Minimalism is not about removing things you love. It's about removing the things that distract you from the things you love."
+                          ? "Minimalism is not about removing things you love. It\u2019s about removing the things that distract you from the things you love."
                           : label === "Headline 2"
                             ? "The quick brown fox"
                             : "Jumps over the lazy dog"}
@@ -208,7 +300,7 @@ export function ThemePreview() {
                 ))}
               </div>
 
-              {/* Role labels */}
+              {/* Role labels row */}
               <div
                 className="flex justify-between text-xs font-mono uppercase tracking-wider px-1"
                 style={{ color: "var(--muted-foreground)" }}
@@ -220,91 +312,78 @@ export function ThemePreview() {
                 ))}
               </div>
 
-              {/* Palette application swatches */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-                {/* Primary */}
-                <div
-                  className="rounded-xl p-6 flex flex-col gap-3"
-                  style={{ backgroundColor: "var(--primary)" }}
-                >
-                  <span
-                    className="text-xs font-mono uppercase tracking-widest opacity-70"
-                    style={{ color: "var(--primary-foreground)" }}
-                  >
-                    Primary
-                  </span>
-                  <p
-                    className="text-lg font-bold leading-tight"
-                    style={{ color: "var(--primary-foreground)" }}
-                  >
-                    Hero &amp; CTAs
-                  </p>
-                  <div
-                    className="text-xs px-3 py-1.5 rounded-full self-start font-medium"
-                    style={{
-                      backgroundColor: "rgba(255,255,255,0.2)",
-                      color: "var(--primary-foreground)",
-                    }}
-                  >
-                    Get started →
-                  </div>
-                </div>
+              {/* ── Role detail cards ──────────────────────────────────── */}
+              <div
+                className="grid gap-3"
+                style={{
+                  gridTemplateColumns: `repeat(${Math.min(colors.length, 3)}, minmax(0, 1fr))`,
+                }}
+              >
+                {colors.map((color, i) => {
+                  const role = COLOR_ROLES[i] as ColorRole;
+                  const meta = ROLE_META[role];
+                  const hex = isDark ? color.darkHex : color.lightHex;
 
-                {/* Secondary */}
-                <div
-                  className="rounded-xl p-6 flex flex-col gap-3"
-                  style={{ backgroundColor: "var(--secondary)" }}
-                >
-                  <span
-                    className="text-xs font-mono uppercase tracking-widest"
-                    style={{ color: "var(--muted-foreground)" }}
-                  >
-                    Secondary
-                  </span>
-                  <p
-                    className="text-lg font-bold leading-tight"
-                    style={{ color: "var(--secondary-foreground)" }}
-                  >
-                    Surfaces &amp; Cards
-                  </p>
-                  <div
-                    className="text-xs px-3 py-1.5 rounded-full self-start font-medium border"
-                    style={{
-                      borderColor: "var(--border)",
-                      color: "var(--secondary-foreground)",
-                    }}
-                  >
-                    Learn more
-                  </div>
-                </div>
+                  return (
+                    <div
+                      key={color.id}
+                      className="rounded-xl p-5 flex flex-col gap-3 border transition-all duration-300 hover:scale-[1.01]"
+                      style={{
+                        borderColor: "var(--border)",
+                        backgroundColor: "var(--secondary)",
+                      }}
+                    >
+                      {/* Color swatch + hex */}
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="w-8 h-8 rounded-lg shrink-0"
+                          style={{
+                            backgroundColor: hex,
+                            outline: "1px solid var(--border)",
+                          }}
+                        />
+                        <div className="flex flex-col">
+                          <span
+                            className="text-xs font-semibold uppercase tracking-widest"
+                            style={{ color: "var(--foreground)" }}
+                          >
+                            {meta.label}
+                          </span>
+                          <span
+                            className="text-[10px] font-mono"
+                            style={{ color: "var(--muted-foreground)" }}
+                          >
+                            {hex}
+                          </span>
+                        </div>
+                      </div>
 
-                {/* Accent */}
-                <div
-                  className="rounded-xl p-6 flex flex-col gap-3"
-                  style={{ backgroundColor: "var(--accent)" }}
-                >
-                  <span
-                    className="text-xs font-mono uppercase tracking-widest"
-                    style={{ color: "var(--muted-foreground)" }}
-                  >
-                    Accent
-                  </span>
-                  <p
-                    className="text-lg font-bold leading-tight"
-                    style={{ color: "var(--accent-foreground)" }}
-                  >
-                    Highlights &amp; Tags
-                  </p>
-                  <div
-                    className="text-xs px-3 py-1.5 rounded-full self-start font-medium"
-                    style={{
-                      backgroundColor: "var(--primary)",
-                      color: "var(--primary-foreground)",
-                    }}
-                  >
-                    Featured
-                  </div>
-                </div>
+                      {/* Description */}
+                      <p
+                        className="text-xs leading-relaxed"
+                        style={{ color: "var(--muted-foreground)" }}
+                      >
+                        {meta.description}
+                      </p>
+
+                      {/* UI uses */}
+                      <div className="flex flex-wrap gap-1">
+                        {meta.uiUses.slice(0, 3).map((use) => (
+                          <span
+                            key={use}
+                            className="px-2 py-0.5 rounded-full text-[10px] font-medium"
+                            style={{
+                              backgroundColor: hex + "22",
+                              color: "var(--foreground)",
+                            }}
+                          >
+                            {use}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </section>
 

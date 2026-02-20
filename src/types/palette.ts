@@ -10,6 +10,11 @@ export interface ColorNode {
 
 export interface PaletteState {
   colors: ColorNode[];
+  schemeName: string;
+  schemeDescription: string;
+  schemeMood: string;
+  schemeUseCases: string[];
+  schemeTags: string[];
   generatePalette: () => void;
   toggleLock: (id: string) => void;
   updateColor: (id: string, newHex: string, mode: "light" | "dark") => void;
