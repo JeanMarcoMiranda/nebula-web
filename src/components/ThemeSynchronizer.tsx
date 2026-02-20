@@ -24,8 +24,9 @@ interface ThemeScopeProps {
 /**
  * Returns a contrasting foreground color (white/black) for a given background hex.
  * Uses strict WCAG contrast ratio comparison rather than simple luminance.
+ * Exported so ThemePreview can compute contrast text colors on concrete hex values.
  */
-function computeForeground(hex: string): string {
+export function computeForeground(hex: string): string {
   if (!hex || !hex.startsWith("#")) return "#09090b";
   const c = colord(hex);
   const contrastWhite = c.contrast("#ffffff");
