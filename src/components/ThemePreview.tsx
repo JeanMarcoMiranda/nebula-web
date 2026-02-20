@@ -17,7 +17,6 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { ArrowRight, Moon, Sun } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-
 import { ThemeScope } from "@/components/ThemeSynchronizer";
 import { COLOR_ROLES } from "@/lib/paletteGenerator";
 import { useState } from "react";
@@ -29,18 +28,21 @@ export function ThemePreview() {
 
   return (
     <div className="w-full flex flex-col gap-[var(--spacing-section)]">
-      {/* ── Preview Frame ─────────────────────────────────────────────── */}
-      <ThemeScope forcedTheme={previewTheme}>
-        {/*
-          This div is the isolation boundary.
-          - The `.dark` class enables Tailwind dark: variants ONLY inside here.
-          - bg/text come from the CSS vars set by ThemeScope above.
-          - The global page is completely unaffected.
+      {/*
+        ThemeScope is a real `div` that carries BOTH:
+        - the `.dark` class (so Tailwind dark: variants activate)
+        - all palette CSS custom properties via `style` (so shadcn reads them)
+        These MUST be on the same element for CSS cascade to work correctly.
+      */}
+      <ThemeScope
+        forcedTheme={previewTheme}
+        className="relative rounded-3xl overflow-hidden border transition-all duration-500"
+      >
+        {/* 
+          No extra `.dark` class here — ThemeScope already handles it.
+          We only use inline styles for things that aren't CSS-var-based.
         */}
         <div
-          className={`relative rounded-3xl overflow-hidden border transition-all duration-500 ${
-            isDark ? "dark border-white/10" : "border-black/8"
-          }`}
           style={{
             backgroundColor: "var(--background)",
             color: "var(--foreground)",
@@ -138,55 +140,38 @@ export function ThemePreview() {
                 </div>
 
                 <div className="space-y-8">
-                  <div className="space-y-2">
-                    <span
-                      className="text-xs font-mono uppercase tracking-widest"
-                      style={{ color: "var(--muted-foreground)" }}
-                    >
-                      Headline 2
-                    </span>
-                    <h2
-                      className="text-4xl font-bold tracking-tight"
-                      style={{ color: "var(--foreground)" }}
-                    >
-                      The quick brown fox
-                    </h2>
-                  </div>
-                  <div className="space-y-2">
-                    <span
-                      className="text-xs font-mono uppercase tracking-widest"
-                      style={{ color: "var(--muted-foreground)" }}
-                    >
-                      Headline 3
-                    </span>
-                    <h3
-                      className="text-2xl font-semibold tracking-tight"
-                      style={{ color: "var(--foreground)" }}
-                    >
-                      Jumps over the lazy dog
-                    </h3>
-                  </div>
-                  <div className="space-y-2">
-                    <span
-                      className="text-xs font-mono uppercase tracking-widest"
-                      style={{ color: "var(--muted-foreground)" }}
-                    >
-                      Body
-                    </span>
-                    <p
-                      className="text-base leading-relaxed"
-                      style={{ color: "var(--muted-foreground)" }}
-                    >
-                      Minimalism is not about removing things you love.
-                      It&apos;s about removing the things that distract you from
-                      the things you love.
-                    </p>
-                  </div>
+                  {[
+                    {
+                      label: "Headline 2",
+                      cls: "text-4xl font-bold tracking-tight",
+                    },
+                    {
+                      label: "Headline 3",
+                      cls: "text-2xl font-semibold tracking-tight",
+                    },
+                    { label: "Body", cls: "text-base leading-relaxed" },
+                  ].map(({ label, cls }) => (
+                    <div key={label} className="space-y-2">
+                      <span
+                        className="text-xs font-mono uppercase tracking-widest"
+                        style={{ color: "var(--muted-foreground)" }}
+                      >
+                        {label}
+                      </span>
+                      <p className={cls} style={{ color: "var(--foreground)" }}>
+                        {label === "Body"
+                          ? "Minimalism is not about removing things you love. It's about removing the things that distract you from the things you love."
+                          : label === "Headline 2"
+                            ? "The quick brown fox"
+                            : "Jumps over the lazy dog"}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </section>
 
-            {/* SECTION 2: PALETTE — Realistic Application */}
+            {/* SECTION 2: PALETTE */}
             <section className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
               <SectionHeader number="02" title="Palette" />
 
@@ -206,6 +191,7 @@ export function ThemePreview() {
                       backgroundColor: `var(--${COLOR_ROLES[i]})`,
                     }}
                   >
+                    {/* Hex label on hover */}
                     <div
                       className="px-3 py-1.5 rounded-full text-xs font-mono opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 shadow-sm"
                       style={{
@@ -234,9 +220,9 @@ export function ThemePreview() {
                 ))}
               </div>
 
-              {/* Realistic palette application — mini UI mockup */}
+              {/* Palette application swatches */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-                {/* Primary — Hero strip */}
+                {/* Primary */}
                 <div
                   className="rounded-xl p-6 flex flex-col gap-3"
                   style={{ backgroundColor: "var(--primary)" }}
@@ -264,7 +250,7 @@ export function ThemePreview() {
                   </div>
                 </div>
 
-                {/* Secondary — Surface strip */}
+                {/* Secondary */}
                 <div
                   className="rounded-xl p-6 flex flex-col gap-3"
                   style={{ backgroundColor: "var(--secondary)" }}
@@ -292,7 +278,7 @@ export function ThemePreview() {
                   </div>
                 </div>
 
-                {/* Accent — Highlight strip */}
+                {/* Accent */}
                 <div
                   className="rounded-xl p-6 flex flex-col gap-3"
                   style={{ backgroundColor: "var(--accent)" }}
@@ -415,7 +401,7 @@ export function ThemePreview() {
                   </div>
                 </div>
 
-                {/* Column 2: Cards & Composition */}
+                {/* Column 2: Card */}
                 <div className="space-y-12">
                   <h4
                     className="text-sm font-medium uppercase tracking-widest"
@@ -501,6 +487,33 @@ export function ThemePreview() {
                       </Button>
                     </CardFooter>
                   </Card>
+
+                  {/* Badges & misc */}
+                  <div className="space-y-4">
+                    <h4
+                      className="text-sm font-medium uppercase tracking-widest"
+                      style={{ color: "var(--muted-foreground)" }}
+                    >
+                      Badges
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge>Default</Badge>
+                      <Badge variant="secondary">Secondary</Badge>
+                      <Badge variant="outline">Outline</Badge>
+                      <Badge variant="destructive">Destructive</Badge>
+                    </div>
+                  </div>
+
+                  {/* Separator demo */}
+                  <div className="space-y-4">
+                    <Separator style={{ backgroundColor: "var(--border)" }} />
+                    <p
+                      className="text-sm text-center"
+                      style={{ color: "var(--muted-foreground)" }}
+                    >
+                      Separator at full width
+                    </p>
+                  </div>
                 </div>
               </div>
             </section>

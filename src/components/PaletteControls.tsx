@@ -24,10 +24,16 @@ export function PaletteControls() {
     if (format === "json") {
       content = JSON.stringify(colors, null, 2);
     } else {
-      content = ":root {\n";
-      colors.forEach((color, index) => {
-        content += `  --color-${index + 1}-light: ${color.lightHex};\n`;
-        content += `  --color-${index + 1}-dark: ${color.darkHex};\n`;
+      // Light theme vars
+      content = "/* Light Mode */\n:root {\n";
+      colors.forEach((color) => {
+        content += `  --${color.role}: ${color.lightHex};\n`;
+      });
+      content += "}\n\n";
+      // Dark theme vars
+      content += "/* Dark Mode */\n.dark {\n";
+      colors.forEach((color) => {
+        content += `  --${color.role}: ${color.darkHex};\n`;
       });
       content += "}";
     }
