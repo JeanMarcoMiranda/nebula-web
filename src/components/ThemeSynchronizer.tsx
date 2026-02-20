@@ -4,7 +4,10 @@ import { usePaletteStore } from "@/store/usePaletteStore";
 import { useTheme } from "next-themes";
 import { CSSProperties } from "react";
 import { COLOR_ROLES } from "@/lib/paletteGenerator";
-import { colord } from "colord";
+import { colord, extend } from "colord";
+import a11yPlugin from "colord/plugins/a11y";
+
+extend([a11yPlugin]);
 
 interface ThemeScopeProps {
   children: React.ReactNode;
@@ -19,12 +22,19 @@ interface ThemeScopeProps {
 }
 
 /**
- * Returns a contrasting foreground color for a given background hex.
- * Uses the WCAG-standard 0.35 luminance threshold.
+ * Returns a contrasting foreground color (white/black) for a given background hex.
+ * Uses strict WCAG contrast ratio comparison rather than simple luminance.
  */
 function computeForeground(hex: string): string {
   if (!hex || !hex.startsWith("#")) return "#09090b";
-  return colord(hex).luminance() > 0.35 ? "#09090b" : "#ffffff";
+  const c = colord(hex);
+  const contrastWhite = c.contrast("#ffffff");
+  const contrastBlack = c.contrast("#000000");
+
+  // Prefer white if it meets AAA (7) or AA (4.5), otherwise pick whichever is higher
+  if (contrastWhite >= 4.5) return "#ffffff";
+  if (contrastBlack >= 4.5) return "#09090b";
+  return contrastWhite > contrastBlack ? "#ffffff" : "#09090b";
 }
 
 /**
@@ -35,38 +45,61 @@ function deriveStructuralTokens(
   primaryHex: string,
   isDark: boolean,
 ): Record<string, string> {
-  const hsl = colord(primaryHex).toHsl();
-  const h = hsl.h;
-  const s = hsl.s;
+  const { h, s } = colord(primaryHex).toHsl();
 
   if (isDark) {
-    const bg = colord({ h, s: Math.min(s * 0.15, 8), l: 5 }).toHex();
-    const card = colord({ h, s: Math.min(s * 0.15, 8), l: 9 }).toHex();
-    const border = colord({ h, s: Math.min(s * 0.2, 12), l: 18 }).toHex();
+    // Premium Dark Mode: Deeply tinted background, not just grey
+    // Low lightness (4-6%), low-mid saturation (10-20%) derived from primary hue
+    const bg = colord({ h, s: Math.min(s * 0.3, 15), l: 5 }).toHex();
+    const card = colord({ h, s: Math.min(s * 0.3, 15), l: 12 }).toHex();
+
+    // Border should be subtle but visible.
+    // Using a higher lightness tint of the hue to create a "glowing" border effect separately
+    const border = colord({ h, s: Math.min(s * 0.3, 15), l: 18 }).toHex();
+
     return {
       "--background": bg,
       "--foreground": "#fafafa",
       "--card": card,
       "--card-foreground": "#fafafa",
-      "--popover": card,
+      "--popover": card, // Popovers match cards
       "--popover-foreground": "#fafafa",
       "--primary-foreground": computeForeground(primaryHex),
+      "--secondary": colord({ h, s: Math.min(s * 0.3, 15), l: 15 }).toHex(),
+      "--secondary-foreground": "#fafafa",
+      "--muted": colord({ h, s: Math.min(s * 0.3, 15), l: 15 }).toHex(),
+      "--muted-foreground": "#a1a1aa",
+      "--accent": colord({ h, s: Math.min(s * 0.5, 25), l: 20 }).toHex(),
+      "--accent-foreground": "#fafafa",
       "--border": border,
       "--input": border,
       "--destructive": "#7f1d1d",
       "--destructive-foreground": "#fafafa",
     };
   } else {
-    const bg = colord({ h, s: Math.min(s * 0.1, 6), l: 98 }).toHex();
-    const border = colord({ h, s: Math.min(s * 0.2, 12), l: 88 }).toHex();
+    // Clean Light Mode: Very subtle tint or pure white
+    // High lightness (98%), very low saturation (3-8%)
+    const bg = colord({ h, s: Math.min(s * 0.2, 8), l: 98 }).toHex();
+
+    // Cards pure white for maximum clean contrast
+    const card = "#ffffff";
+
+    const border = colord({ h, s: Math.min(s * 0.2, 10), l: 90 }).toHex();
+
     return {
       "--background": bg,
       "--foreground": "#09090b",
-      "--card": "#ffffff",
+      "--card": card,
       "--card-foreground": "#09090b",
-      "--popover": "#ffffff",
+      "--popover": card,
       "--popover-foreground": "#09090b",
       "--primary-foreground": computeForeground(primaryHex),
+      "--secondary": colord({ h, s: Math.min(s * 0.2, 12), l: 94 }).toHex(),
+      "--secondary-foreground": "#09090b",
+      "--muted": colord({ h, s: Math.min(s * 0.1, 8), l: 94 }).toHex(),
+      "--muted-foreground": "#71717a",
+      "--accent": colord({ h, s: Math.min(s * 0.2, 12), l: 94 }).toHex(),
+      "--accent-foreground": "#09090b",
       "--border": border,
       "--input": border,
       "--destructive": "#ef4444",
@@ -90,54 +123,21 @@ function buildPaletteVars(
     if (value?.startsWith("#")) vars[name] = value;
   };
 
-  // Structural tokens derived from primary
+  // Structural tokens derived from primary (provides defaults for bg, card, border, etc.)
   const primary = colors[0];
   if (primary) {
     const structural = deriveStructuralTokens(primary[mode], isDark);
     Object.assign(vars, structural);
   }
 
-  // Palette role colors + their foregrounds
+  // Palette role colors explicit overrides
+  // If the palette has a specific "secondary" or "muted", it overrides the structural defaults
   colors.forEach((color, index) => {
     const role = COLOR_ROLES[index];
     if (!role) return;
     const hex = color[mode];
     setVar(`--${role}`, hex);
     setVar(`--${role}-foreground`, computeForeground(hex));
-  });
-
-  // Fallbacks for roles not provided by the current palette size
-  const fallbackSources: Record<string, number> = {
-    secondary: 0,
-    accent: 1,
-    ring: 0,
-  };
-
-  COLOR_ROLES.forEach((role, i) => {
-    if (colors[i]) return; // already set
-
-    if (role === "muted") {
-      const base = colors[0];
-      if (base) {
-        const hex = base[mode];
-        const mutedHex = isDark
-          ? colord(hex).desaturate(0.6).darken(0.3).toHex()
-          : colord(hex).desaturate(0.6).lighten(0.1).toHex();
-        setVar("--muted", mutedHex);
-        setVar("--muted-foreground", isDark ? "#a1a1aa" : "#71717a");
-      }
-      return;
-    }
-
-    const srcIdx = fallbackSources[role];
-    if (srcIdx !== undefined) {
-      const src = colors[srcIdx] ?? colors[0];
-      if (src) {
-        const hex = src[mode];
-        setVar(`--${role}`, hex);
-        setVar(`--${role}-foreground`, computeForeground(hex));
-      }
-    }
   });
 
   // Chart vars — cycle through palette

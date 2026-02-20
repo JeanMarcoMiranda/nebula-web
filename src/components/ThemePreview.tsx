@@ -64,8 +64,8 @@ export function ThemePreview() {
             style={{
               borderColor: "var(--border)",
               backgroundColor: isDark
-                ? "rgba(255,255,255,0.03)"
-                : "rgba(0,0,0,0.02)",
+                ? "color-mix(in srgb, var(--secondary), transparent 80%)"
+                : "color-mix(in srgb, var(--primary), transparent 96%)",
             }}
           >
             {/* Browser chrome dots */}
@@ -129,8 +129,8 @@ export function ThemePreview() {
               style={{
                 borderColor: "var(--border)",
                 backgroundColor: isDark
-                  ? "rgba(255,255,255,0.03)"
-                  : "rgba(0,0,0,0.015)",
+                  ? "color-mix(in srgb, var(--secondary), transparent 80%)"
+                  : "color-mix(in srgb, var(--primary), transparent 95%)",
               }}
             >
               {/* Label row */}
@@ -272,7 +272,9 @@ export function ThemePreview() {
                 className="grid h-32 md:h-44 rounded-2xl overflow-hidden"
                 style={{
                   gridTemplateColumns: `repeat(${colors.length}, minmax(0, 1fr))`,
-                  boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.08)",
+                  boxShadow: isDark
+                    ? "inset 0 0 0 1px rgba(255,255,255,0.1)"
+                    : "inset 0 0 0 1px rgba(0,0,0,0.08)",
                 }}
               >
                 {colors.map((color, i) => (
@@ -327,10 +329,10 @@ export function ThemePreview() {
                   return (
                     <div
                       key={color.id}
-                      className="rounded-xl p-5 flex flex-col gap-3 border transition-all duration-300 hover:scale-[1.01]"
+                      className="rounded-xl p-5 flex flex-col gap-3 border transition-all duration-300 hover:scale-[1.01] hover:shadow-lg"
                       style={{
                         borderColor: "var(--border)",
-                        backgroundColor: "var(--secondary)",
+                        backgroundColor: "var(--card)",
                       }}
                     >
                       {/* Color swatch + hex */}
@@ -345,7 +347,7 @@ export function ThemePreview() {
                         <div className="flex flex-col">
                           <span
                             className="text-xs font-semibold uppercase tracking-widest"
-                            style={{ color: "var(--foreground)" }}
+                            style={{ color: "var(--card-foreground)" }}
                           >
                             {meta.label}
                           </span>
@@ -373,7 +375,7 @@ export function ThemePreview() {
                             key={use}
                             className="px-2 py-0.5 rounded-full text-[10px] font-medium"
                             style={{
-                              backgroundColor: hex + "22",
+                              backgroundColor: hex + "33",
                               color: "var(--foreground)",
                             }}
                           >
@@ -444,7 +446,11 @@ export function ThemePreview() {
                         <Input
                           id="preview-email"
                           placeholder="name@example.com"
-                          className="bg-transparent"
+                          className="border-border"
+                          style={{
+                            backgroundColor:
+                              "color-mix(in srgb, var(--secondary), transparent 80%)",
+                          }}
                         />
                       </div>
                       <div className="grid gap-2">
@@ -520,9 +526,9 @@ export function ThemePreview() {
                       <div
                         className="h-32 rounded-lg flex items-center justify-center border border-dashed"
                         style={{
-                          backgroundColor: "var(--secondary)",
+                          backgroundColor:
+                            "color-mix(in srgb, var(--secondary), transparent 50%)",
                           borderColor: "var(--border)",
-                          opacity: 0.5,
                         }}
                       >
                         <div
